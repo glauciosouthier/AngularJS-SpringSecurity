@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
-import net.dontdrinkandroot.example.angularrestspringsecurity.entity.User;
 import net.dontdrinkandroot.example.angularrestspringsecurity.rest.TokenUtils;
 import net.dontdrinkandroot.example.angularrestspringsecurity.transfer.TokenTransfer;
 import net.dontdrinkandroot.example.angularrestspringsecurity.transfer.UserTransfer;
