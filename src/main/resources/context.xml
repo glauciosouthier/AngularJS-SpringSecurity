@@ -79,6 +79,13 @@
 		<constructor-arg value="ThisIsASecretSoChangeMe" />
 	</bean>
 
+	<!--
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder">
+		<constructor-arg value="MD5" />
+	</bean>
+		-->
+
 	<security:authentication-manager id="authenticationManager">
 		<security:authentication-provider
 			user-service-ref="userDao">
