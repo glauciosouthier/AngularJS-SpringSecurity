@@ -1,10 +1,16 @@
 
 var logEnabled =true;
-$(document).bind("mobileinit", function(){
-    $.mobile.page.prototype.options.domCache = true ;
-    $.mobile.allowCrossDomainPages = true;
-});
+
 var services = angular.module('exampleApp.services', ['ngResource']);
+services.config(
+		[  '$httpProvider', function($httpProvider) {
+			
+			 $httpProvider.defaults.useXDomain = true;
+			 //delete $httpProvider.defaults.headers.common['X-Requested-With']; 
+			
+		} ]
+		
+	);
 
 var mapModule = angular.module('MapModule', ['ngMap']);
 
@@ -13,6 +19,9 @@ mapModule.service('MapService', function() { this.show= function ($scope) {showM
 var exampleApp = angular.module('exampleApp', ['ngRoute', 'ngCookies', 'exampleApp.services','MapModule'])
 	.config(
 		[ '$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+			
+			 $httpProvider.defaults.useXDomain = true;
+			 //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 			
 			configureRoutes($routeProvider,$locationProvider);
 			configureInterceptors($httpProvider);

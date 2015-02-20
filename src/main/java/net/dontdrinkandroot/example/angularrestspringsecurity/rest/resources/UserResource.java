@@ -3,6 +3,7 @@ package net.dontdrinkandroot.example.angularrestspringsecurity.rest.resources;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -96,6 +97,7 @@ public class UserResource {
 	@Path("/authenticate")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_OCTET_STREAM})
 	public TokenTransfer authenticate(@FormParam("username") String username,
 			@FormParam("password") String password) {
 		if(username==null || "".equals(username)||password==null || "".equals(password)){

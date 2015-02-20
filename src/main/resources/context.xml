@@ -15,14 +15,15 @@
 	<context:annotation-config />
 
 	<!-- DATABASE SETUP -->
-<!--
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
 		<property name="url" value="jdbc:hsqldb:mem:example" />
 	</bean>
--->
+
+<!--
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
@@ -30,7 +31,7 @@
 		<property name="username" value="postgres" />
 		<property name="password" value="postgres" />
 	</bean>
-
+-->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
@@ -54,7 +55,7 @@
 	<bean id="userDao"
 		class="net.dontdrinkandroot.example.angularrestspringsecurity.dao.user.JpaUserDao">
 	</bean>
-<!--
+<!---->
 	<bean id="dataBaseInitializer"
 		class="net.dontdrinkandroot.example.angularrestspringsecurity.dao.DataBaseInitializer"
 		init-method="initDataBase">
@@ -62,7 +63,7 @@
 		<constructor-arg ref="newsEntryDao" />
 		<constructor-arg ref="passwordEncoder" />
 	</bean>
--->
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- INIT REST COMPONENTS -->
