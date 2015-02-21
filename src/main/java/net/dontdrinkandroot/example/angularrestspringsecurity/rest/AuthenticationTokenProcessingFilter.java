@@ -25,15 +25,16 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
+	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
-		((HttpServletResponse) response).addHeader(
-				"Access-Control-Allow-Origin", "*");
-		((HttpServletResponse) response).addHeader(
-				"Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
+		HttpServletResponse response = (HttpServletResponse) res;
+		HttpServletRequest request = (HttpServletRequest) req;
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods",
+				"POST, PUT, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Allow-Headers", "x-auth-token");
+		response.setHeader("Access-Control-Max-Age", "3600");
 		
-		((HttpServletResponse) response).addHeader(
-				"Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
 		HttpServletRequest httpRequest = this.getAsHttpRequest(request);
 
 		String authToken = this.extractAuthTokenFromRequest(httpRequest);

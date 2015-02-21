@@ -64,11 +64,11 @@ dataFactory.authenticateUser = function (username,password) {
 	var config = {
             method: 'POST',
             url: urlBase + 'user/authenticate',
-            headers : {'Content-Type': 'application/json'},
-            data: JSON.stringify({username: username, password: password}),
+            headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param({username: username, password: password}),
        };
-   // return $http(config);
-	return $http.post(urlBase + 'user/authenticate',{username: username, password: password});
+   return $http(config);
+	//return $http.post(urlBase + 'user/authenticate',{username: username, password: password});
 };
 return dataFactory;
 }

@@ -10,13 +10,15 @@ import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-@javax.persistence.Entity(name="users")
+@javax.persistence.Entity
+@Table(name="users")
 public class User implements Entity, UserDetails
 {
 	private static final long serialVersionUID = -8236229971783557190L;

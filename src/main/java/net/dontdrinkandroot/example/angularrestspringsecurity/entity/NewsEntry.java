@@ -5,21 +5,17 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.ws.rs.FormParam;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import net.dontdrinkandroot.example.angularrestspringsecurity.JsonViews;
 
 import org.codehaus.jackson.map.annotate.JsonView;
 
 
-/**
- * JPA Annotated Pojo that represents a news entry.
- * 
- * @author Philip W. Sorst <philip@sorst.net>
- */
-@XmlRootElement
-@javax.persistence.Entity(name="newsentry")
+
+@javax.persistence.Entity
+@Table(name="newsentry")
 public class NewsEntry implements Entity
 {
 

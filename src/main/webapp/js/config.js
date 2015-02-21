@@ -5,6 +5,6 @@ var exampleAppConfig = {
 	 * environments and is still secure when using https. */
 	useAuthTokenHeader: true,
 	//service : 'http://localhost:8080/angular-rest-springsecurity/'
-	service : 'http://localhost:8081/AngularJS-SpringSecurity/'
+	service : 'http://localhost:8080/AngularJS-SpringSecurity/'
 		
 };

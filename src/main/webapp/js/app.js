@@ -2,15 +2,7 @@
 var logEnabled =true;
 
 var services = angular.module('exampleApp.services', ['ngResource']);
-services.config(
-		[  '$httpProvider', function($httpProvider) {
-			
-			 $httpProvider.defaults.useXDomain = true;
-			 //delete $httpProvider.defaults.headers.common['X-Requested-With']; 
-			
-		} ]
-		
-	);
+
 
 var mapModule = angular.module('MapModule', ['ngMap']);
 
@@ -20,8 +12,9 @@ var exampleApp = angular.module('exampleApp', ['ngRoute', 'ngCookies', 'exampleA
 	.config(
 		[ '$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 			
-			 $httpProvider.defaults.useXDomain = true;
+			 //$httpProvider.defaults.useXDomain = true;
 			 //delete $httpProvider.defaults.headers.common['X-Requested-With'];
+			 //$httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
 			
 			configureRoutes($routeProvider,$locationProvider);
 			configureInterceptors($httpProvider);
