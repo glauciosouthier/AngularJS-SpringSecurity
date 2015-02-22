@@ -1,5 +1,8 @@
 var logEnabled = true;
-
+$(document).bind("mobileinit", function(){
+    $.mobile.page.prototype.options.domCache = true ;
+    $.mobile.allowCrossDomainPages = true;
+});
 var services = angular.module('exampleApp.services', [ 'ngResource' ]);
 
 var mapModule = angular.module('MapModule', [ 'ngMap' ]);
@@ -12,7 +15,7 @@ mapModule.service('MapService', function() {
 
 var exampleApp = angular
 		.module('exampleApp',
-				[ 'ngRoute', 'ngCookies', 'exampleApp.services', 'MapModule' ])
+				[ 'ngRoute', 'ngCookies', 'exampleApp.services', 'MapModule'])
 		.config(
 				[
 						'$routeProvider',
@@ -158,7 +161,10 @@ function configureInterceptors($httpProvider) {
 	$httpProvider.interceptors.push(function($q, $rootScope, $location) {
 		return {
 			'request' : function(config) {
-				var isRestCall = config.url.contains('rest');
+				var isRestCall = config.url.contains('/rest/');
+				if (logEnabled)console.log(config.method);
+				if (logEnabled)console.log(config.headers);
+				
 				if (isRestCall && angular.isDefined($rootScope.authToken)) {
 					var authToken = $rootScope.authToken;
 					if (exampleAppConfig.useAuthTokenHeader) {
@@ -204,7 +210,7 @@ function IndexController($scope, NewsService, DataFactory) {
 	};
 };
 
-function EditController($scope, $routeParams, $location, NewsService,
+function EditController($scope, $routeParams, $location,$timeout, NewsService,
 		DataFactory) {
 
 	// $scope.newsEntry = NewsService.get({id: $routeParams.id});
@@ -212,7 +218,7 @@ function EditController($scope, $routeParams, $location, NewsService,
 	DataFactory.getNews($routeParams.id).success(function(news) {
 		$scope.newsEntry = news;
 		if (logEnabled)
-			console.log(JSON.stringify(news));
+			console.log('News returned: ' +JSON.stringify(news));
 	}).error(function(error) {
 		console.log('Unable to load news data: ' + error.message);
 
@@ -221,42 +227,35 @@ function EditController($scope, $routeParams, $location, NewsService,
 	$scope.save = function() {
 
 		if (logEnabled)
-			console.log('News: ' + $routeParams.id);
-		if (logEnabled)
-			console.log(JSON.stringify($scope.newsEntry));
-
+			console.log('News to update: ' +JSON.stringify($scope.newsEntry));
+	
 		 DataFactory.updateNews($scope.newsEntry)
-			.done(function() {
-				$location.path('/');
-			})
-			.success(function() {
-				$location.path('/');
+			.done(function(data) {
+				$timeout(function() {
+					console.log('OK');
+					$location.path('/');
+				}, 500);	
 			})
 			.fail(function(error) {
 				console.log('Unable to save news data: ' + error.message);
-			}).error(function(error) {
-				console.log('Unable to save news data: ' + error.message);
 			});
-		
+		 	
 	};
 };
 
-function CreateController($scope, $location, NewsService, DataFactory) {
+function CreateController($scope, $location,$timeout, NewsService, DataFactory) {
 
 	$scope.newsEntry = new Object();
 
 	$scope.save = function() {
-		/*
-		 * $scope.newsEntry.$save(function() { $location.path('/'); });
-		 */
+		
 		DataFactory.insertNews($scope.newsEntry)
-		.done(function() {
-			$location.path('/');
+		.done(function(data) {
+			$timeout(function() {
+				console.log('OK');
+				$location.path('/');
+			}, 500);
 		}).fail(function(error) {
-			console.log('Unable to insert news data: ' + error.message);
-		}).success(function() {
-			$location.path('/');
-		}).error(function(error) {
 			console.log('Unable to insert news data: ' + error.message);
 		});
 
@@ -269,16 +268,7 @@ function LoginController($scope, $rootScope, $location, $cookieStore,
 	$scope.rememberMe = false;
 
 	$scope.login = function() {
-		/*
-		 * var params=$.param({username: $scope.username, password:
-		 * $scope.password}); console.log(params);
-		 * UserService.authenticate(params, function(authenticationResult) { var
-		 * authToken = authenticationResult.token;
-		 * console.log(authenticationResult.token); $rootScope.authToken =
-		 * authToken; if ($scope.rememberMe) { $cookieStore.put('authToken',
-		 * authToken); } UserService.get(function(user) { $rootScope.user =
-		 * user; $location.path("/"); }); });
-		 */
+
 		DataFactory.authenticateUser($scope.username, $scope.password).success(
 				function(result, status, headers) {
 					var authToken = result.token;

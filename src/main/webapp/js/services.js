@@ -19,6 +19,7 @@ dataFactory.insertNews = function (newsEntry) {
         data:           JSON.stringify(newsEntry),
         dataType:       'json',
         type:           'POST',
+        delay: 5,
         contentType:    'application/json; charset=UTF-8',
         crossDomain:    true,
         beforeSend : function(xhr) {
@@ -30,19 +31,21 @@ dataFactory.insertNews = function (newsEntry) {
 dataFactory.updateNews = function (newsEntry) {
 	//return $http.put(urlBase + 'news/update/'+newsEntry.id ,newsEntry);
 	//return $http.post(urlBase + 'news/update/'+newsEntry.id ,newsEntry);
-	return $.ajax({
+	var d = $.Deferred();
+	 $.ajax({
         url:            urlBase + 'news/update/'+newsEntry.id ,
         data:           JSON.stringify(newsEntry),
         dataType:       'json',
         type:           'PUT',
+        delay: 5,
         contentType:    'application/json; charset=UTF-8',
         crossDomain:    true,
         beforeSend : function(xhr) {
         	xhr.setRequestHeader('X-Auth-Token', $rootScope.authToken);
         }
-    });
+    }).done(function(p){d.resolve(p);}).fail(d.reject);
 		
-   
+    return d.promise();
 };
 
 
@@ -71,13 +74,13 @@ return dataFactory;
 
 mapModule.controller('EventSimpleCtrl', ['$scope', '$timeout', function($scope, $timeout) {
 	var marker, map,infoWindow; 
-	
+	//google.load("maps", "3.8", {"callback": loadMap, other_params: "sensor=true&language=pt-br"});
 	$scope.$on('mapInitialized', function(evt, evtMap) { 
 		map = evtMap; 
 		if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(onSuccess, onError,{'enableHighAccuracy':true,'timeout':20000});
 		}
-		}); 
+	}); 
 	
 	function onError(error){
 	    alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
