@@ -252,7 +252,7 @@ function CreateController($scope, $location,$timeout, NewsService, DataFactory) 
 		DataFactory.insertNews($scope.newsEntry)
 		.done(function(data) {
 			$timeout(function() {
-				console.log('OK');
+				console.log('Created:'+ JSON.stringify(data));
 				$location.path('/');
 			}, 500);
 		}).fail(function(error) {
