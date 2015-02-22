@@ -32,7 +32,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods",
 				"POST, PUT, GET, OPTIONS, DELETE");
-		response.setHeader("Access-Control-Allow-Headers", "x-auth-token");
+		response.setHeader("Access-Control-Allow-Headers", "x-auth-token,Content-Type,Content-Range, Content-Disposition, Content-Description");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		
 		HttpServletRequest httpRequest = this.getAsHttpRequest(request);

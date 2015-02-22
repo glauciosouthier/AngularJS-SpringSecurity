@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -32,11 +33,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @Path("/news")
-public class NewsEntryResource
-{
+public class NewsEntryResource {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -46,12 +45,11 @@ public class NewsEntryResource
 	@Autowired
 	private ObjectMapper mapper;
 
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/list")
-	public String list() throws JsonGenerationException, JsonMappingException, IOException
-	{
+	public String list() throws JsonGenerationException, JsonMappingException,
+			IOException {
 		this.logger.info("list()");
 
 		ObjectWriter viewWriter;
@@ -65,12 +63,10 @@ public class NewsEntryResource
 		return viewWriter.writeValueAsString(allEntries);
 	}
 
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public NewsEntry read(@PathParam("id") Long id)
-	{
+	public NewsEntry read(@PathParam("id") Long id) {
 		this.logger.info("read(id)");
 
 		NewsEntry newsEntry = getDao().find(id);
@@ -80,41 +76,39 @@ public class NewsEntryResource
 		return newsEntry;
 	}
 
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create")
-	public NewsEntry create(NewsEntry newsEntry)
-	{
+	public NewsEntry create(NewsEntry newsEntry) {
 		this.logger.info("create(): " + newsEntry);
 		newsEntry.setDate(new Date());
 		return getDao().save(newsEntry);
 	}
 
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_FORM_URLENCODED,
+			MediaType.APPLICATION_OCTET_STREAM })
 	@Path("/update/{id}")
-	public NewsEntry update(@PathParam("id") Long id, NewsEntry newsEntry)
-	{
-		this.logger.info("update(): " + newsEntry);
-		newsEntry.setDate(new Date());
-		return getDao().save(newsEntry);
-	}
-	
-	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_OCTET_STREAM})
-	@Path("/update/{id}")
-	public NewsEntry updatePut(@PathParam("id") Long id, NewsEntry newsEntry)
-	{
+	public NewsEntry updatePost(@PathParam("id") Long id, NewsEntry newsEntry) {
 		this.logger.info("update(): " + newsEntry);
 		newsEntry.setDate(new Date());
 		return getDao().save(newsEntry);
 	}
 
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes({ MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_FORM_URLENCODED,
+			MediaType.APPLICATION_OCTET_STREAM })
+	@Path("/update/{id}")
+	public NewsEntry updatePut(@PathParam("id") Long id, NewsEntry newsEntry) {
+		this.logger.info("update(): " + newsEntry);
+		newsEntry.setDate(new Date());
+		return getDao().save(newsEntry);
+	}
 
 	private NewsEntryDao getDao() {
 		return this.newsEntryDao;
@@ -123,19 +117,18 @@ public class NewsEntryResource
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/delete/{id}")
-	public void delete(@PathParam("id") Long id)
-	{
+	public void delete(@PathParam("id") Long id) {
 		this.logger.info("delete(id)");
 
 		getDao().delete(id);
 	}
 
-
-	private boolean isAdmin()
-	{
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	private boolean isAdmin() {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		Object principal = authentication.getPrincipal();
-		if (principal instanceof String && ((String) principal).equals("anonymousUser")) {
+		if (principal instanceof String
+				&& ((String) principal).equals("anonymousUser")) {
 			return false;
 		}
 		UserDetails userDetails = (UserDetails) principal;

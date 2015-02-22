@@ -1,29 +1,5 @@
 
-
-
-services.factory('UserService', function($resource) {
-	
-	return $resource(exampleAppConfig.service+'rest/user/:action', {},
-			{
-				authenticate: {
-					method: 'POST',
-					params: {'action' : 'authenticate'},
-					headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-				}
-			}
-		);
-});
-
-
-
-services.factory('NewsService', function($resource) {
-	return $resource(exampleAppConfig.service+'rest/news/:id', {id: '@id'});
-});
-
-
-
-
-services.factory('DataFactory', ['$http', function($http) {
+services.factory('DataFactory', ['$http','$rootScope', function($http,$rootScope) {
 
 var urlBase = exampleAppConfig.service+'rest/';
 var dataFactory = {};
@@ -37,21 +13,38 @@ dataFactory.getNewsList = function () {
 };
 
 dataFactory.insertNews = function (newsEntry) {
-    return $http.post(urlBase + 'news/create',newsEntry );
+    //return $http.post(urlBase + 'news/create',newsEntry );
+	return $.ajax({
+        url:            urlBase + 'news/create' ,
+        data:           JSON.stringify(newsEntry),
+        dataType:       'json',
+        type:           'POST',
+        contentType:    'application/json; charset=UTF-8',
+        crossDomain:    true,
+        beforeSend : function(xhr) {
+        	xhr.setRequestHeader('X-Auth-Token', $rootScope.authToken);
+        }
+    });
 };
 
 dataFactory.updateNews = function (newsEntry) {
-	var config = {
-            method: 'PUT',
-            url: urlBase + 'news/update/'+newsEntry.id ,
-            headers : {'Content-Type': 'application/json'},
-            data: JSON.stringify(newsEntry)
-            //params: JSON.stringify(newsEntry),
-       };
-    return $http(config);
 	//return $http.put(urlBase + 'news/update/'+newsEntry.id ,newsEntry);
 	//return $http.post(urlBase + 'news/update/'+newsEntry.id ,newsEntry);
+	return $.ajax({
+        url:            urlBase + 'news/update/'+newsEntry.id ,
+        data:           JSON.stringify(newsEntry),
+        dataType:       'json',
+        type:           'PUT',
+        contentType:    'application/json; charset=UTF-8',
+        crossDomain:    true,
+        beforeSend : function(xhr) {
+        	xhr.setRequestHeader('X-Auth-Token', $rootScope.authToken);
+        }
+    });
+		
+   
 };
+
 
 dataFactory.deleteNews = function (id) {
 	return $http.delete(urlBase + 'news/delete/' + id);
@@ -73,6 +66,7 @@ dataFactory.authenticateUser = function (username,password) {
 return dataFactory;
 }
 ]);
+
 
 
 mapModule.controller('EventSimpleCtrl', ['$scope', '$timeout', function($scope, $timeout) {
@@ -215,3 +209,19 @@ function showMap($scope){
         google.maps.event.trigger(selectedMarker, 'click');
     }	
 }
+services.factory('UserService', function($resource) {
+	
+	return $resource(exampleAppConfig.service+'rest/user/:action', {},
+			{
+				authenticate: {
+					method: 'POST',
+					params: {'action' : 'authenticate'},
+					headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+				}
+			}
+		);
+});
+
+services.factory('NewsService', function($resource) {
+	return $resource(exampleAppConfig.service+'rest/news/:id', {id: '@id'});
+});
