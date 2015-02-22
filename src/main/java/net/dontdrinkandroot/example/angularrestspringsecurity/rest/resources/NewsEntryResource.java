@@ -88,9 +88,8 @@ public class NewsEntryResource {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,
-			MediaType.APPLICATION_FORM_URLENCODED,
-			MediaType.APPLICATION_OCTET_STREAM })
+	@Consumes({ MediaType.APPLICATION_JSON, 
+			MediaType.APPLICATION_FORM_URLENCODED})
 	@Path("/update/{id}")
 	public NewsEntry updatePost(@PathParam("id") Long id, NewsEntry newsEntry) {
 		this.logger.info("update(): " + newsEntry);
@@ -101,8 +100,7 @@ public class NewsEntryResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({ MediaType.APPLICATION_JSON,
-			MediaType.APPLICATION_FORM_URLENCODED,
-			MediaType.APPLICATION_OCTET_STREAM })
+			MediaType.APPLICATION_FORM_URLENCODED})
 	@Path("/update/{id}")
 	public NewsEntry updatePut(@PathParam("id") Long id, NewsEntry newsEntry) {
 		this.logger.info("update(): " + newsEntry);
