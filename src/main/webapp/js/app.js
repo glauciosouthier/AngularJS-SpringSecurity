@@ -225,27 +225,19 @@ function EditController($scope, $routeParams, $location, NewsService,
 		if (logEnabled)
 			console.log(JSON.stringify($scope.newsEntry));
 
-		var result = DataFactory.updateNews($scope.newsEntry);
-		if (result.done) {
-			result.done(function(result) {
+		 DataFactory.updateNews($scope.newsEntry)
+			.done(function() {
 				$location.path('/');
-			});
-		}
-		if (result.success) {
-			result.success(function(result) {
+			})
+			.success(function() {
 				$location.path('/');
-			});
-		}
-		if (result.fail) {
-			result.fail(function(error) {
+			})
+			.fail(function(error) {
+				console.log('Unable to save news data: ' + error.message);
+			}).error(function(error) {
 				console.log('Unable to save news data: ' + error.message);
 			});
-		}
-		if (result.error) {
-			result.error(function(error) {
-				console.log('Unable to save news data: ' + error.message);
-			});
-		}
+		
 	};
 };
 
@@ -257,28 +249,17 @@ function CreateController($scope, $location, NewsService, DataFactory) {
 		/*
 		 * $scope.newsEntry.$save(function() { $location.path('/'); });
 		 */
-		var result =DataFactory.insertNews($scope.newsEntry);
-		if (result.done) {
-			result.done(function(result) {
-				$location.path('/');
-			});
-		}
-		if (result.success) {
-			result.success(function(result) {
-				$location.path('/');
-			});
-		}
-		if (result.fail) {
-			result.fail(function(error) {
-				console.log('Unable to insert news data: ' + error.message);
-			});
-		}
-		if (result.error) {
-			result.error(function(error) {
-				console.log('Unable to insert news data: ' + error.message);
-			});
-		}
-		
+		DataFactory.insertNews($scope.newsEntry)
+		.done(function() {
+			$location.path('/');
+		}).fail(function(error) {
+			console.log('Unable to insert news data: ' + error.message);
+		}).success(function() {
+			$location.path('/');
+		}).error(function(error) {
+			console.log('Unable to insert news data: ' + error.message);
+		});
+
 	};
 };
 
